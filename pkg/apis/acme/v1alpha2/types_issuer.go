@@ -145,6 +145,10 @@ type ACMEChallengeSolverHTTP01Ingress struct {
 	// +optional
 	ServiceType corev1.ServiceType `json:"serviceType,omitempty"`
 
+	// Controls the self check strategy
+	// +optional
+	SelfCheckStrategy cmmeta.HTTPSelfCheckStrategy `json:"selfCheckStrategy"`
+
 	// The ingress class to use when creating Ingress resources to solve ACME
 	// challenges that use this challenge solver.
 	// Only one of 'class' or 'name' may be specified.

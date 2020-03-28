@@ -2098,6 +2098,12 @@ spec:
                                           Exists, the value should be empty, otherwise
                                           just a regular string.
                                         type: string
+                        selfCheckStrategy:
+                          description: Controls the self check strategy
+                          type: string
+                          enum:
+                          - Standard
+                          - Disabled
                         serviceType:
                           description: Optional service type for Kubernetes solver
                             service
@@ -3698,6 +3704,12 @@ spec:
                                                 be empty, otherwise just a regular
                                                 string.
                                               type: string
+                              selfCheckStrategy:
+                                description: Controls the self check strategy
+                                type: string
+                                enum:
+                                - Standard
+                                - Disabled
                               serviceType:
                                 description: Optional service type for Kubernetes
                                   solver service
@@ -5497,6 +5509,12 @@ spec:
                                                 be empty, otherwise just a regular
                                                 string.
                                               type: string
+                              selfCheckStrategy:
+                                description: Controls the self check strategy
+                                type: string
+                                enum:
+                                - Standard
+                                - Disabled
                               serviceType:
                                 description: Optional service type for Kubernetes
                                   solver service

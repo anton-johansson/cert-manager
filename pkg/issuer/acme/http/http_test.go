@@ -23,6 +23,7 @@ import (
 	"testing"
 
 	cmacme "github.com/jetstack/cert-manager/pkg/apis/acme/v1alpha2"
+	v1 "github.com/jetstack/cert-manager/pkg/apis/meta/v1"
 )
 
 // countReachabilityTestCalls is a wrapper function that allows us to count the number
@@ -40,6 +41,7 @@ func TestCheck(t *testing.T) {
 		reachabilityTest reachabilityTest
 		challenge        *cmacme.Challenge
 		expectedErr      bool
+		expectedCalls    int
 	}
 	tests := []testT{
 		{
@@ -47,14 +49,35 @@ func TestCheck(t *testing.T) {
 			reachabilityTest: func(context.Context, *url.URL, string) error {
 				return nil
 			},
-			expectedErr: false,
+			expectedErr:   false,
+			expectedCalls: 2,
 		},
 		{
 			name: "should error",
 			reachabilityTest: func(context.Context, *url.URL, string) error {
 				return fmt.Errorf("failed")
 			},
-			expectedErr: true,
+			expectedErr:   true,
+			expectedCalls: 2,
+		},
+		{
+			name: "error but self check skipped",
+			reachabilityTest: func(context.Context, *url.URL, string) error {
+				return fmt.Errorf("failed")
+			},
+			expectedErr:   false,
+			expectedCalls: 0,
+			challenge: &cmacme.Challenge{
+				Spec: cmacme.ChallengeSpec{
+					Solver: &cmacme.ACMEChallengeSolver{
+						HTTP01: &cmacme.ACMEChallengeSolverHTTP01{
+							Ingress: &cmacme.ACMEChallengeSolverHTTP01Ingress{
+								SelfCheckStrategy: v1.HTTPSelfCheckStrategyDisabled,
+							},
+						},
+					},
+				},
+			},
 		},
 	}
 
@@ -80,8 +103,8 @@ func TestCheck(t *testing.T) {
 				t.Errorf("Expected error from Check, but got none")
 				return
 			}
-			if !test.expectedErr && calls != requiredCallsForPass {
-				t.Errorf("Expected Wait to verify reachability test passes %d times, but only checked %d", requiredCallsForPass, calls)
+			if !test.expectedErr && calls != test.expectedCalls {
+				t.Errorf("Expected Wait to verify reachability test passes %d times, but only checked %d", test.expectedCalls, calls)
 				return
 			}
 		})

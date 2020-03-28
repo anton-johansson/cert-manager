@@ -498,6 +498,7 @@ func Convert_acme_ACMEChallengeSolverHTTP01_To_v1alpha3_ACMEChallengeSolverHTTP0
 
 func autoConvert_v1alpha3_ACMEChallengeSolverHTTP01Ingress_To_acme_ACMEChallengeSolverHTTP01Ingress(in *v1alpha3.ACMEChallengeSolverHTTP01Ingress, out *acme.ACMEChallengeSolverHTTP01Ingress, s conversion.Scope) error {
 	out.ServiceType = v1.ServiceType(in.ServiceType)
+	out.SelfCheckStrategy = meta.HTTPSelfCheckStrategy(in.SelfCheckStrategy)
 	out.Class = (*string)(unsafe.Pointer(in.Class))
 	out.Name = in.Name
 	out.PodTemplate = (*acme.ACMEChallengeSolverHTTP01IngressPodTemplate)(unsafe.Pointer(in.PodTemplate))
@@ -512,6 +513,7 @@ func Convert_v1alpha3_ACMEChallengeSolverHTTP01Ingress_To_acme_ACMEChallengeSolv
 
 func autoConvert_acme_ACMEChallengeSolverHTTP01Ingress_To_v1alpha3_ACMEChallengeSolverHTTP01Ingress(in *acme.ACMEChallengeSolverHTTP01Ingress, out *v1alpha3.ACMEChallengeSolverHTTP01Ingress, s conversion.Scope) error {
 	out.ServiceType = v1.ServiceType(in.ServiceType)
+	out.SelfCheckStrategy = metav1.HTTPSelfCheckStrategy(in.SelfCheckStrategy)
 	out.Class = (*string)(unsafe.Pointer(in.Class))
 	out.Name = in.Name
 	out.PodTemplate = (*v1alpha3.ACMEChallengeSolverHTTP01IngressPodTemplate)(unsafe.Pointer(in.PodTemplate))

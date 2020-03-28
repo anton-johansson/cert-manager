@@ -59,3 +59,15 @@ type SecretKeySelector struct {
 const (
 	TLSCAKey = "ca.crt"
 )
+
+// HTTPSelfCheckStrategy describes how the self check should be performed for HTTP01 solvers
+// +kubebuilder:validation:Enum=Standard;Disabled
+type HTTPSelfCheckStrategy string
+
+const (
+	// HTTPSelfCheckStrategyStandard means that a regular self check will be performed by querying the challenge located at the DNS name.
+	HTTPSelfCheckStrategyStandard HTTPSelfCheckStrategy = "Standard"
+
+	// HTTPSelfCheckStrategyDisabled means that no self check will be performed.
+	HTTPSelfCheckStrategyDisabled HTTPSelfCheckStrategy = "Disabled"
+)

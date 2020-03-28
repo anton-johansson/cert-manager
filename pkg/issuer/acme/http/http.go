@@ -32,6 +32,7 @@ import (
 
 	cmacme "github.com/jetstack/cert-manager/pkg/apis/acme/v1alpha2"
 	"github.com/jetstack/cert-manager/pkg/apis/certmanager/v1alpha2"
+	metav1 "github.com/jetstack/cert-manager/pkg/apis/meta/v1"
 	"github.com/jetstack/cert-manager/pkg/controller"
 	"github.com/jetstack/cert-manager/pkg/issuer/acme/http/solver"
 	logf "github.com/jetstack/cert-manager/pkg/logs"
@@ -113,6 +114,13 @@ func (s *Solver) Present(ctx context.Context, issuer v1alpha2.GenericIssuer, ch 
 func (s *Solver) Check(ctx context.Context, issuer v1alpha2.GenericIssuer, ch *cmacme.Challenge) error {
 	ctx = logf.NewContext(http01LogCtx(ctx), nil, "selfCheck")
 	log := logf.FromContext(ctx)
+
+	if ch.Spec.Solver != nil && ch.Spec.Solver.HTTP01 != nil && ch.Spec.Solver.HTTP01.Ingress != nil {
+		if metav1.HTTPSelfCheckStrategyDisabled == ch.Spec.Solver.HTTP01.Ingress.SelfCheckStrategy {
+			log.V(logf.InfoLevel).Info(("self check is disabled, skipping it"))
+			return nil
+		}
+	}
 
 	// HTTP Present is idempotent and the state of the system may have
 	// changed since present was called by the controllers (killed pods, drained nodes)

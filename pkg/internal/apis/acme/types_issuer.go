@@ -131,6 +131,9 @@ type ACMEChallengeSolverHTTP01Ingress struct {
 	// Optional service type for Kubernetes solver service
 	ServiceType corev1.ServiceType
 
+	// Controls the self check strategy
+	SelfCheckStrategy cmmeta.HTTPSelfCheckStrategy
+
 	// The ingress class to use when creating Ingress resources to solve ACME
 	// challenges that use this challenge solver.
 	// Only one of 'class' or 'name' may be specified.
